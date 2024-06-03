@@ -1,0 +1,56 @@
+{
+  "name": "meimei-vue3-ts",
+  "private": true,
+  "version": "0.0.0",
+  "license": "MIT",
+  "keywords": [
+    "electron",
+    "rollup",
+    "vite",
+    "vue3",
+    "vue"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "2.3.1",
+    "@handsontable/vue3": "^14.3.0",
+    "@vueup/vue-quill": "1.2.0",
+    "@vueuse/core": "10.10.0",
+    "axios": "1.7.2",
+    "concurrent-tasks": "^3.0.0",
+    "dayjs": "^1.11.11",
+    "echarts": "5.5.0",
+    "element-plus": "^2.7.4",
+    "file-saver": "2.0.5",
+    "fuse.js": "7.0.0",
+    "handsontable": "^14.3.0",
+    "jquery": "^3.7.1",
+    "js-cookie": "3.0.5",
+    "jsencrypt": "3.3.2",
+    "mitt": "^3.0.1",
+    "nprogress": "0.2.0",
+    "pinia": "2.1.7",
+    "sortablejs": "^1.15.2",
+    "vue": "^3.4.27",
+    "vue-cropper": "^1.0.9",
+    "vue-plugin-hiprint": "^0.0.56",
+    "vue-router": "4.3.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "5.0.5",
+    "@vitejs/plugin-vue-jsx": "^4.0.0",
+    "@vue/compiler-sfc": "3.4.27",
+    "sass": "1.77.4",
+    "typescript": "^5.4.5",
+    "unplugin-auto-import": "0.17.6",
+    "unplugin-vue-setup-extend-plus": "1.0.1",
+    "vite": "5.2.12",
+    "vite-plugin-compression": "0.5.1",
+    "vite-plugin-svg-icons": "2.0.1",
+    "vue-tsc": "2.0.19"
+  }
+}
