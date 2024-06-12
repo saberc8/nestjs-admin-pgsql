@@ -48,6 +48,12 @@ export class SysDeptService {
   /* 新增 */
   async add(addSysDeptDto: AddSysDeptDto) {
     const { parentId } = addSysDeptDto;
+    if (!parentId) {
+      addSysDeptDto.ancestors = ',';
+      return await this.prisma.sysDept.create({
+        data: addSysDeptDto,
+      });
+    }
     let parentDept = undefined;
     const dept = await this.prisma.$transaction(async (prisma) => {
       parentDept = await prisma.sysDept.findUnique({

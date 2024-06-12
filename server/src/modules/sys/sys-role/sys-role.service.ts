@@ -294,6 +294,7 @@ export class SysRoleService {
         },
       },
     });
+    // q:addPv是什么意思
     const promiseArr = userArr.map((user) => this.addPv(user.userId));
     return await Promise.all(promiseArr);
   }

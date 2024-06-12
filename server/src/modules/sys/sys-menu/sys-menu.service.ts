@@ -28,7 +28,6 @@ export class SysMenuService {
         },
       },
     });
-    console.log(menuList, 'menuList');
     menuList.forEach((menu) => (menu.parentId = Number(menu.parentId)));
     return menuList;
   }

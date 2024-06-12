@@ -4,7 +4,7 @@ export const extendedPrismaClient = new PrismaClient().$extends({
   model: {
     $allModels: {
       // 查询并且计数
-      async findAndCount<T, A>(
+      async findAndCount<T>(
         this: T,
         args: Prisma.Args<T, 'findMany'>,
       ): Promise<{
@@ -28,7 +28,7 @@ export const extendedPrismaClient = new PrismaClient().$extends({
         };
       },
 
-      async cheshi<T, A>() {},
+      async cheshi<T>() {},
     },
   },
 });

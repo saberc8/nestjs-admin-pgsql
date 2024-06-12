@@ -16,13 +16,15 @@ import { Captcha } from 'captcha.gif';
 import Redis from 'ioredis';
 import { SysDept, SysRole, SysUser } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
-import { Menu, ResInfo, Route } from './dto/res-login.dto';
+import { Menu, Route } from './dto/res-login.dto';
 import { LoginInforService } from '../monitor/login-infor/login-infor.service';
 import { Request } from 'express';
 import { DataScope } from 'src/common/type/data-scope.type';
 import { OnlineDto } from '../monitor/online/dto/res-online.dto';
-const captcha = new Captcha();
+import { ReqRegisterDto } from './dto/req-register.dto';
+import * as bcrypt from 'bcrypt';
 
+const captcha = new Captcha();
 @Injectable()
 export class LoginService {
   constructor(
@@ -321,5 +323,33 @@ export class LoginService {
     const menuTree: Menu[] = this.sharedService.handleTree(menus, 'menuId');
     const routerTree = menuTree.map((item) => new Route(item));
     return routerTree;
+  }
+
+  /* 注册 */
+  async register(reqLoginDto: ReqRegisterDto) {
+    const { username, password, code, uuid } = reqLoginDto;
+    const token = await this.redis.get(`${CAPTCHA_IMG_KEY}:${uuid}`);
+    if (!token) throw new ApiException('验证码已过期', 400);
+    if (token.toLowerCase() !== code.toLowerCase())
+      throw new ApiException('验证码错误', 400);
+    const user = await this.prisma.sysUser.findUnique({
+      where: {
+        userName: username,
+      },
+    });
+    if (user) throw new ApiException('用户名已存在', 400);
+    const salt = await bcrypt.genSalt();
+    const newPassword = await bcrypt.hash(password, salt);
+    await this.prisma.sysUser.create({
+      data: {
+        userName: username,
+        password: newPassword,
+        nickName: username,
+        email: '',
+        phonenumber: '',
+        status: '1',
+        delFlag: '0',
+      },
+    });
   }
 }

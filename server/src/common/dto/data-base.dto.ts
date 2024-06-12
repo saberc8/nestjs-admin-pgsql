@@ -9,8 +9,4 @@ export class DataBaseDto {
   updateBy?: string;
   @Excel({ name: '更新时间', sort: 103, dateFormat: 'YYYY-MM-DD HH:mm:ss' })
   updateTime?: Date | string;
-  @Excel({ name: '备注', sort: 104 })
-  @IsOptional()
-  @IsString()
-  remark?: string;
 }

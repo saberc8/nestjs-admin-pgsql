@@ -34,6 +34,7 @@ export class Route {
   path: string;
   redirect?: string;
   query?: string;
+  orderNum?: number;
   meta?: {
     title?: string;
     icon?: string;
@@ -57,8 +58,28 @@ export class Route {
     this.hidden = menu.visible === '1';
     this.name = capitalizeFirstLetter(menu.path || '');
     this.query = menu.query;
+    this.orderNum = menu.orderNum;
     if (!menu.parentId && menu.isFrame === '1') {
-      this.path = '/' + menu.path;
+      if (menu.menuType === 'C') {
+        this.path = '/' + menu.path;
+        this.component = 'Layout';
+        this.children = [
+          {
+            path: menu.path,
+            name: menu.path,
+            component: menu.component,
+            hidden: false,
+            orderNum: menu.orderNum,
+            meta: {
+              title: menu.menuName,
+              icon: menu.icon,
+              noCache: menu.isCache === '1',
+            },
+          },
+        ];
+      } else {
+        this.path = '/' + menu.path;
+      }
     } else {
       this.path = menu.path;
     }

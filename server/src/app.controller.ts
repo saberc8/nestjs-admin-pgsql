@@ -1,5 +1,4 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiException } from './common/exceptions/api.exception';
 import { PrismaService } from 'nestjs-prisma';
 
 @Controller()

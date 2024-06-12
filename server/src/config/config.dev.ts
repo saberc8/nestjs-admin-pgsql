@@ -7,7 +7,7 @@ export default {
   /**
    * 服务启动的端口
    */
-  port: 3331,
+  port: 3250,
 
   /**
    * token加密的密匙

@@ -237,7 +237,7 @@ export class SysUserController {
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         })
         .build({
-          exceptionFactory: (error) => {
+          exceptionFactory: () => {
             throw new ApiException(
               '文件格式错误！ 文件最大为5M，且必须是 xlsx 格式',
             );

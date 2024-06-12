@@ -34,7 +34,8 @@ export class SysUserService {
   async list(getSysUserListDto: GetSysUserListDto, dataScope: DataScope) {
     const { skip, take, status, userName, deptId, phonenumber, params } =
       getSysUserListDto;
-    const contains = deptId ? `,${deptId},` : undefined;
+    const contains = deptId ? `,${deptId},` : '';
+    const deptSearch = deptId ? { ancestors: { contains } } : {};
     return await this.customPrisma.client.sysUser.findAndCount({
       include: {
         dept: true,
@@ -53,11 +54,7 @@ export class SysUserService {
             gte: params.beginTime,
             lt: params.endTime,
           },
-          dept: {
-            ancestors: {
-              contains,
-            },
-          },
+          dept: deptSearch,
           OR: dataScope.OR,
         },
       },

@@ -16,6 +16,7 @@ import { LoginService } from './login.service';
 import { SysUser } from '@prisma/client';
 import { Request } from 'express';
 import { UserInfo } from 'src/common/type/user-info.type';
+import { ReqRegisterDto } from './dto/req-register.dto';
 @Controller()
 export class LoginController {
   constructor(private readonly loginService: LoginService) {}
@@ -69,5 +70,11 @@ export class LoginController {
       const token = authorization.slice(7);
       await this.loginService.logout(token);
     }
+  }
+  /* 注册用户 */
+  @Public()
+  @Post('register')
+  async register(@Body() ReqRegisterDto: ReqRegisterDto) {
+    return await this.loginService.register(ReqRegisterDto);
   }
 }

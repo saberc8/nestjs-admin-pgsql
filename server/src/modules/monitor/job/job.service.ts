@@ -309,7 +309,7 @@ export class JobService {
     console.log('该方法会执行5秒');
     // throw new ApiException('错误了')
     console.log(new Date());
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       //测试并发
       setTimeout(() => {
         resolve();
