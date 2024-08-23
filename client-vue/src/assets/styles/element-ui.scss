@@ -28,13 +28,6 @@
 	}
 }
 
-.fixed-width {
-	.el-button--mini {
-		padding: 7px 10px;
-		width: 60px;
-	}
-}
-
 .status-col {
 	.cell {
 		padding: 0 10px;
@@ -73,11 +66,6 @@
 	}
 }
 
-// fix date-picker ui bug in filter-item
-.el-range-editor.el-input__inner {
-	display: inline-flex !important;
-}
-
 // to fix el-date-picker css style
 .el-range-separator {
 	box-sizing: content-box;
@@ -93,11 +81,4 @@
 
 .el-dropdown .el-dropdown-link {
 	color: var(--el-color-primary) !important;
-}
-
-/* 全局弹框里的内容是否需要屏幕范围内滚动 */
-.el-dialog__body {
-	//   max-height: calc(100vh - 214px) !important;
-	//   overflow-y: auto !important;
-	// padding: 0 20px !important;
 }

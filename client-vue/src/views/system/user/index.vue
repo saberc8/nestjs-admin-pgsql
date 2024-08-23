@@ -20,7 +20,7 @@
 									:props="{ label: 'label', children: 'children' }"
 									highlight-current
 									:height="height"
-									:filter-method="filterMethod"
+									:filter-method="filterMethod1"
 									@node-click="handleNodeClick"
 									:expand-on-click-node="false"
 								/>
@@ -32,208 +32,24 @@
 			<template #paneR>
 				<!-- 再次将右侧面板进行拆分 -->
 				<div class="h-100 df fdc">
-					<el-form
-						class="top-form"
-						:model="queryParams"
-						ref="queryRef"
-						:inline="true"
-						v-show="showSearch"
-						label-width="68px"
+					<ProTable
+						ref="proTable"
+						:dataSource="dataSource"
+						:columns="columns"
+						:params="params"
+						:searchForm="searchForm"
+						:showForm="showForm"
+						:getListFunc="getListFunc"
 					>
-						<el-form-item label="用户名称" prop="userName">
-							<el-input
-								v-model="queryParams.userName"
-								placeholder="请输入用户名称"
-								clearable
-								style="width: 207px"
-								@keyup.enter="handleQuery"
-							/>
-						</el-form-item>
-						<el-form-item label="手机号码" prop="phonenumber">
-							<el-input
-								v-model="queryParams.phonenumber"
-								placeholder="请输入手机号码"
-								clearable
-								style="width: 207px"
-								@keyup.enter="handleQuery"
-							/>
-						</el-form-item>
-						<el-form-item label="状态" prop="status">
-							<el-select
-								v-model="queryParams.status"
-								placeholder="用户状态"
-								clearable
-								style="width: 207px"
+						<template #toolbar_title>
+							<span style="font-weight: bold; font-size: 20px; color: #000"
+								>列表</span
 							>
-								<el-option
-									v-for="dict in sys_normal_disable"
-									:key="dict.value"
-									:label="dict.label"
-									:value="dict.value"
-								/>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="创建时间" style="width: 275px">
-							<el-date-picker
-								v-model="dateRange"
-								value-format="YYYY-MM-DD"
-								type="daterange"
-								range-separator="-"
-								start-placeholder="开始日期"
-								end-placeholder="结束日期"
-							></el-date-picker>
-						</el-form-item>
-						<el-form-item>
-							<el-button type="primary" icon="Search" @click="handleQuery"
-								>搜索</el-button
-							>
-							<el-button icon="Refresh" @click="resetQuery">重置</el-button>
-						</el-form-item>
-					</el-form>
-
-					<el-row :gutter="10" class="mb8">
-						<el-col :span="1.5">
-							<el-button
-								type="primary"
-								plain
-								icon="Plus"
-								@click="handleAdd"
-								v-hasPermi="['system:user:add']"
-								>新增</el-button
-							>
-						</el-col>
-						<el-col :span="1.5">
-							<el-button
-								type="success"
-								plain
-								icon="Edit"
-								:disabled="single"
-								@click="handleUpdate"
-								v-hasPermi="['system:user:edit']"
-								>修改</el-button
-							>
-						</el-col>
-						<el-col :span="1.5">
-							<el-button
-								type="danger"
-								plain
-								icon="Delete"
-								:disabled="multiple"
-								@click="handleDelete"
-								v-hasPermi="['system:user:remove']"
-								>删除</el-button
-							>
-						</el-col>
-						<el-col :span="1.5">
-							<el-button
-								type="info"
-								plain
-								icon="Upload"
-								@click="handleImport"
-								v-hasPermi="['system:user:import']"
-								>导入</el-button
-							>
-						</el-col>
-						<el-col :span="1.5">
-							<el-button
-								type="warning"
-								plain
-								icon="Download"
-								@click="handleExport"
-								v-hasPermi="['system:user:export']"
-								>导出</el-button
-							>
-						</el-col>
-						<right-toolbar
-							v-model:showSearch="showSearch"
-							@queryTable="getList"
-						></right-toolbar>
-					</el-row>
-					<div class="f1">
-						<JsTable
-							id="system_user_1"
-							:columns="columns"
-							:data="userList"
-							border
-							v-loading="loading"
-							width="100%"
-							height="100%"
-							@selection-change="handleSelectionChange"
-						>
-							<template #status="{ row }">
-								<el-switch
-									v-model="row.status"
-									active-value="0"
-									inactive-value="1"
-									@change="handleStatusChange(row)"
-								></el-switch>
-							</template>
-							<template #createTime="{ row }">
-								<span>{{ parseTime(row.createTime) }}</span>
-							</template>
-							<template #operate="{ row }">
-								<el-tooltip
-									content="修改"
-									placement="top"
-									v-if="row.userId !== 1"
-								>
-									<el-button
-										link
-										type="primary"
-										icon="Edit"
-										@click="handleUpdate(row)"
-										v-hasPermi="['system:user:edit']"
-									></el-button>
-								</el-tooltip>
-								<el-tooltip
-									content="删除"
-									placement="top"
-									v-if="row.userId !== 1"
-								>
-									<el-button
-										link
-										type="primary"
-										icon="Delete"
-										@click="handleDelete(row)"
-										v-hasPermi="['system:user:remove']"
-									></el-button>
-								</el-tooltip>
-								<el-tooltip
-									content="重置密码"
-									placement="top"
-									v-if="row.userId !== 1"
-								>
-									<el-button
-										link
-										type="primary"
-										icon="Key"
-										@click="handleResetPwd(row)"
-										v-hasPermi="['system:user:resetPwd']"
-									></el-button>
-								</el-tooltip>
-								<el-tooltip
-									content="分配角色"
-									placement="top"
-									v-if="row.userId !== 1"
-								>
-									<el-button
-										link
-										type="primary"
-										icon="CircleCheck"
-										@click="handleAuthRole(row)"
-										v-hasPermi="['system:user:edit']"
-									></el-button>
-								</el-tooltip>
-							</template>
-						</JsTable>
-					</div>
-					<pagination
-						:total="total"
-						v-model:page="queryParams.pageNum"
-						v-model:limit="queryParams.pageSize"
-						@pagination="getList"
-						:selection="ids.length"
-					/>
+						</template>
+						<template #toolbar_buttons>
+							<el-button type="primary" @click="add"> 新增 </el-button>
+						</template>
+					</ProTable>
 				</div>
 			</template>
 		</splitpane>
@@ -443,8 +259,23 @@
 	</div>
 </template>
 
-<script lang="jsx" setup name="User">
+<script lang="js" setup name="User">
+
+import { createVNode } from 'vue'
 import { getToken } from '@/utils/auth'
+import { createButton, createSpaceGroup } from '@/utils/createElement'
+import dayjs from 'dayjs'
+import {
+	ElButton,
+	ElMessage,
+	ElSpace,
+	ElMessageBox,
+	ElTransfer,
+	ElTag,
+	ElSwitch,
+} from 'element-plus'
+import DialogForm from '@/components/DialogForm/index.vue'
+import ProTable from '@/components/ProTable/index.vue'
 import {
 	changeUserStatus,
 	listUser,
@@ -500,7 +331,7 @@ const upload = reactive({
 	url: import.meta.env.VITE_APP_BASE_API + '/system/user/importData',
 })
 // 列显隐信息
-const columns = shallowReactive([
+const columns1 = shallowReactive([
 	{
 		prop: '勾选框',
 		label: '勾选框',
@@ -612,7 +443,7 @@ const data = reactive({
 const { queryParams, form, rules } = toRefs(data)
 
 /** 通过条件过滤节点  */
-function filterMethod(query, node) {
+function filterMethod1(query, node) {
 	return node.label.includes(query)
 }
 
@@ -624,7 +455,13 @@ function onQueryChanged(query) {
 function getDeptTree() {
 	deptTreeSelect()
 		.then((response) => {
+
 			deptOptions.value = response.data
+			// 添加全部，value为空
+			deptOptions.value.unshift({
+				id: undefined,
+				label: '全部',
+			})
 			return nextTick()
 		})
 		.then(() => {
@@ -632,17 +469,7 @@ function getDeptTree() {
 			onQueryChanged('')
 		})
 }
-/** 查询用户列表 */
-function getList() {
-	loading.value = true
-	listUser(proxy.addDateRange(queryParams.value, dateRange.value)).then(
-		(res) => {
-			loading.value = false
-			userList.value = res.rows
-			total.value = res.total
-		}
-	)
-}
+
 /** 节点单击事件 */
 function handleNodeClick(data) {
 	queryParams.value.deptId = data.id
@@ -651,7 +478,7 @@ function handleNodeClick(data) {
 /** 搜索按钮操作 */
 function handleQuery() {
 	queryParams.value.pageNum = 1
-	getList()
+	refreshTable()
 }
 /** 重置按钮操作 */
 function resetQuery() {
@@ -670,7 +497,7 @@ function handleDelete(row) {
 			return delUser(userIds)
 		})
 		.then(() => {
-			getList()
+			refreshTable()
 			proxy.$modal.msgSuccess('删除成功')
 		})
 		.catch(() => {})
@@ -685,6 +512,7 @@ function handleExport() {
 		`user_${new Date().getTime()}.xlsx`
 	)
 }
+
 /** 用户状态修改  */
 function handleStatusChange(row) {
 	let text = row.status === '0' ? '启用' : '停用'
@@ -720,8 +548,7 @@ function handleAuthRole(row) {
 }
 /** 重置密码按钮操作 */
 function handleResetPwd(row) {
-	proxy
-		.$prompt('请输入"' + row.userName + '"的新密码', '提示', {
+	proxy.$modal.prompt('请输入"' + row.userName + '"的新密码', '提示', {
 			confirmButtonText: '确定',
 			cancelButtonText: '取消',
 			closeOnClickModal: false,
@@ -735,12 +562,7 @@ function handleResetPwd(row) {
 		})
 		.catch(() => {})
 }
-/** 选择条数  */
-function handleSelectionChange(selection) {
-	ids.value = selection.map((item) => item.userId)
-	single.value = selection.length != 1
-	multiple.value = !selection.length
-}
+
 /** 导入按钮操作 */
 function handleImport() {
 	upload.title = '用户导入'
@@ -770,7 +592,7 @@ const handleFileSuccess = (response, file, fileList) => {
 		'导入结果',
 		{ dangerouslyUseHTMLString: true }
 	)
-	getList()
+	refreshTable()
 }
 /** 提交上传文件 */
 function submitFileForm() {
@@ -833,24 +655,144 @@ function submitForm() {
 				updateUser(form.value).then((response) => {
 					proxy.$modal.msgSuccess('修改成功')
 					open.value = false
-					getList()
+					refreshTable()
 				})
 			} else {
 				addUser(form.value).then((response) => {
 					proxy.$modal.msgSuccess('新增成功')
 					open.value = false
-					getList()
+					refreshTable()
 				})
 			}
 		}
 	})
 }
-function getInitPassword() {
-	getConfigKey('sys.user.initPassword').then((response) => {
-		initPassword.value = response.msg
-	})
-}
-getInitPassword()
+
 getDeptTree()
-getList()
+
+// 分割
+const proTable = ref()
+const visible = ref(false)
+// const title = ref('新增')
+const getListFunc = listUser
+const formFunc = ref()
+const formData = ref({
+	nickName: '',
+})
+const renderForm = [
+	{
+		field: 'nickName',
+		label: '名称',
+		type: 'input',
+		placeholder: '请输入名称',
+		required: true,
+	},
+]
+const columns = [
+	{
+		type: 'seq',
+		width: 60,
+		treeNode: false, // 开启树图表
+	},
+	{ field: 'userId', title: 'ID', width: 80 },
+	{ field: 'userName', title: '用户名称', width: 140 },
+	{ field: 'nickName', title: '用户昵称', width: 140 },
+	{
+		field: 'dept',
+		title: '部门',
+		width: 140,
+		formatter: (row) => {
+			return row.dept ? row.dept.deptName : ''
+		},
+	},
+	{
+		field: 'status',
+		title: '状态',
+		width: 100,
+		slots: {
+			default: ({ row }) => {
+				return createVNode(
+					ElSwitch,
+					{
+						modelValue: row.status,
+						activeValue: '0',
+						inactiveValue: '1',
+						onClick: () => {
+							row.status = row.status === '0' ? '1' : '0'
+							handleStatusChange(row)
+						},
+					},
+					{}
+				)
+			},
+		},
+	},
+	{
+		field: 'createTime',
+		title: '创建时间',
+		formatter: (row) => {
+			return dayjs(row.row.createTime).format('YYYY-MM-DD HH:mm:ss')
+		},
+	},
+	{
+		title: '操作',
+		width: 340,
+		align: 'center',
+		fixed: 'right',
+		slots: {
+			default: ({ row }) => {
+					return createSpaceGroup([
+					createButton('primary', 'small', '编辑', () => handleUpdate(row)),
+					createButton('success', 'small', '分配角色', () => handleAuthRole(row)),
+					createButton('warning', 'small', '重置密码', () => handleResetPwd(row)),
+					createButton('danger', 'small', '删除', () =>
+					handleDelete(row)
+					),
+				])
+			},
+		},
+	},
+]
+
+const showForm = true
+// 搜索区域
+const searchForm = [
+	{
+		label: '名称',
+		field: 'nickName',
+		type: 'input',
+		componentProps: {
+			placeholder: '请输入名称',
+		},
+	},
+]
+const params = ref({
+	pageNum: 1,
+	pageSize: 10,
+})
+
+let dataSource = ref([])
+const add = async () => {
+	title.value = '新增'
+	visible.value = true
+	formData.value = renderForm.reduce((acc, cur) => {
+		acc[cur.field] = ''
+		return acc
+	}, {})
+	formFunc.value = adduser
+}
+
+const close = (e) => {
+	visible.value = false
+	if (e) {
+		refreshTable()
+	}
+}
+
+const refreshTable = () => {
+	setTimeout(() => {
+		proTable.value.reloadData()
+	}, 500)
+}
+
 </script>

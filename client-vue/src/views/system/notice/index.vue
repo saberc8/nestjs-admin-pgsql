@@ -222,7 +222,7 @@
 					</el-col>
 					<el-col :span="24">
 						<el-form-item label="内容">
-							<editor v-model="form.noticeContent" :min-height="192" />
+							<el-input v-model="form.noticeContent" />
 						</el-form-item>
 					</el-col>
 				</el-row>

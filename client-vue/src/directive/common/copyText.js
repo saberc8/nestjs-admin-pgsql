@@ -1,6 +1,5 @@
 /**
  * v-copyText 复制文本内容
- * Copyright (c) 2022 mei-mei
  */
 
 export default {

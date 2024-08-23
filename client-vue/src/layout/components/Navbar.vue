@@ -6,28 +6,10 @@
 			class="hamburger-container"
 			@toggleClick="toggleSideBar"
 		/>
-		<breadcrumb
-			id="breadcrumb-container"
-			class="breadcrumb-container"
-			v-if="!settingsStore.topNav"
-		/>
-		<top-nav
-			id="topmenu-container"
-			class="topmenu-container"
-			v-if="settingsStore.topNav"
-		/>
-
+		<breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 		<div class="right-menu">
 			<template v-if="appStore.device !== 'mobile'">
-				<header-search id="header-search" class="right-menu-item" />
-
 				<screenfull id="screenfull" class="right-menu-item hover-effect" />
-
-				<el-tooltip content="布局大小" effect="dark" placement="bottom">
-					<size-select id="size-select" class="right-menu-item hover-effect" />
-				</el-tooltip>
-
-				<notice id="notice" class="right-menu-item hover-effect" />
 			</template>
 			<div class="avatar-container">
 				<el-dropdown
@@ -64,12 +46,8 @@
 <script setup>
 import { ElMessageBox } from 'element-plus'
 import Breadcrumb from '@/components/Breadcrumb'
-import TopNav from '@/components/TopNav'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
-import SizeSelect from '@/components/SizeSelect'
-import HeaderSearch from '@/components/HeaderSearch'
-import Notice from '@/components/Notice'
 import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'
@@ -153,51 +131,48 @@ function setLayout() {
 	.right-menu {
 		float: right;
 		height: 100%;
-		line-height: 50px;
 		display: flex;
+		align-items: center;
 
 		&:focus {
 			outline: none;
 		}
 
 		.right-menu-item {
-			display: inline-block;
-			padding: 0 8px;
-			height: 100%;
-			font-size: 18px;
+			font-size: 12px;
 			color: #5a5e66;
-			vertical-align: text-bottom;
+			padding: 4px;
+			margin-right: 10px;
 
 			&.hover-effect {
 				cursor: pointer;
 				transition: background 0.3s;
 
 				&:hover {
-					background: rgba(0, 0, 0, 0.025);
+					background: rgba(0, 0, 0, 0.1);
+					padding: 4px;
+					border-radius: 4px;
 				}
 			}
 		}
 
 		.avatar-container {
-			margin-right: 40px;
 
 			.avatar-wrapper {
-				margin-top: 5px;
 				position: relative;
+				display: flex;
+				align-items: center;
 
 				.user-avatar {
 					cursor: pointer;
-					width: 40px;
-					height: 40px;
-					border-radius: 10px;
+					width: 30px;
+					height: 30px;
+					border-radius: 6px;
 				}
-
 				i {
 					cursor: pointer;
-					position: absolute;
-					right: -20px;
-					top: 25px;
 					font-size: 12px;
+					margin-left: 6px;
 				}
 			}
 		}

@@ -26,6 +26,7 @@ const useTagsViewStore = defineStore('tags-view', {
 			)
 		},
 		addCachedView(view) {
+			console.log(view, 'view tag');
 			if (this.cachedViews.includes(view.name)) return
 			if (!view.meta.noCache) {
 				this.cachedViews.push(view.name)

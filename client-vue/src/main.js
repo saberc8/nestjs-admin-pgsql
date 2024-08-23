@@ -2,8 +2,8 @@ import { createApp } from 'vue'
 
 import Cookies from 'js-cookie'
 
-import ElementPlus from 'element-plus'
-import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+// import ElementPlus from 'element-plus'
+// import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
 import '@/assets/styles/index.scss' // global css
 import '@/assets/styles/variables.module.scss' // global css
@@ -13,9 +13,6 @@ import App from './App'
 import store from './store'
 import router from './router'
 import directive from './directive' // directive
-
-// 事件总线
-import mitt from 'mitt'
 
 // 注册指令
 import plugins from './plugins' // plugins
@@ -36,7 +33,7 @@ import {
 	handleTree,
 	selectDictLabel,
 	selectDictLabels,
-} from '@/utils/mei-mei'
+} from '@/utils/tools'
 
 //拖拽布局
 import Splitpane from '@/components/ReSplitPane'
@@ -44,8 +41,7 @@ import Splitpane from '@/components/ReSplitPane'
 import Pagination from '@/components/Pagination'
 // 自定义表格工具组件
 import RightToolbar from '@/components/RightToolbar'
-// 富文本组件
-import Editor from '@/components/Editor'
+
 // 文件上传组件
 import FileUpload from '@/components/FileUpload'
 // 图片上传组件
@@ -56,15 +52,18 @@ import ImagePreview from '@/components/ImagePreview'
 import TreeSelect from '@/components/TreeSelect'
 // 字典标签组件
 import DictTag from '@/components/DictTag'
-// 自定义表格组件
-import JsTable from '@/components/Table/index.jsx'
-// 打印机
-import { hiPrintPlugin } from 'vue-plugin-hiprint'
-hiPrintPlugin.disAutoConnect() // 取消自动连接直接打印客户端
-const app = createApp(App)
 
-// 全局方法挂载
-app.config.globalProperties.$bus = mitt()
+
+import VxeTable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+
+import VxeUI from 'vxe-pc-ui'
+import 'vxe-pc-ui/lib/style.css'
+
+import * as echarts from 'echarts'
+
+const app = createApp(App)
+app.config.globalProperties.$echarts = echarts // 全局使用echarts
 app.config.globalProperties.useDict = useDict
 app.config.globalProperties.download = download
 app.config.globalProperties.parseTime = parseTime
@@ -82,23 +81,24 @@ app.component('FileUpload', FileUpload)
 app.component('ImageUpload', ImageUpload)
 app.component('ImagePreview', ImagePreview)
 app.component('RightToolbar', RightToolbar)
-app.component('Editor', Editor)
-app.component('JsTable', JsTable)
 
 app.use(router)
 app.use(store)
 app.use(plugins)
 app.use(elementIcons)
-app.use(hiPrintPlugin, '$hiprint')
+
+app.use(VxeUI)
+app.use(VxeTable)
+
 app.component('svg-icon', SvgIcon)
 
 directive(app)
 
 // 使用element-plus 并且设置全局的大小
-app.use(ElementPlus, {
-	locale: zhCn,
-	// 支持 large、default、small
-	size: Cookies.get('size') || 'default',
-})
+// app.use(ElementPlus, {
+// 	locale: zhCn,
+// 	// 支持 large、default、small
+// 	size: Cookies.get('size') || 'default',
+// })
 
 app.mount('#app')

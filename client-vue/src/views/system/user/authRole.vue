@@ -114,23 +114,22 @@ function submitForm() {
 	})
 }
 
-;(() => {
-	const userId = route.params && route.params.userId
-	if (userId) {
-		loading.value = true
-		getAuthRole(userId).then((response) => {
-			form.value = response.user
-			roles.value = response.roles
-			total.value = roles.value.length
-			nextTick(() => {
-				roles.value.forEach((row) => {
-					if (row.flag) {
-						proxy.$refs['roleRef'].toggleRowSelection(row)
-					}
-				})
+const userId = route.params.id
+console.log(userId, 'userId')
+if (userId) {
+	loading.value = true
+	getAuthRole(userId).then((response) => {
+		form.value = response.user
+		roles.value = response.roles
+		total.value = roles.value.length
+		nextTick(() => {
+			roles.value.forEach((row) => {
+				if (row.flag) {
+					proxy.$refs['roleRef'].toggleRowSelection(row)
+				}
 			})
-			loading.value = false
 		})
-	}
-})()
+		loading.value = false
+	})
+}
 </script>

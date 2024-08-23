@@ -13,11 +13,6 @@ export default {
 	showSettings: true,
 
 	/**
-	 * 是否显示顶部导航
-	 */
-	topNav: false,
-
-	/**
 	 * 是否显示 tagsView
 	 */
 	tagsView: true,

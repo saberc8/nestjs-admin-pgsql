@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { parseStrEmpty } from '@/utils/mei-mei'
+import { parseStrEmpty } from '@/utils/tools'
 
 // 查询用户列表
 export function listUser(query) {

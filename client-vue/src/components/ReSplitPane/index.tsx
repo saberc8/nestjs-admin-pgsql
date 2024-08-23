@@ -60,7 +60,7 @@ export default defineComponent({
 			active.value = false
 		}
 
-		const onMouseMove = (e: any): void => {
+		const onMouseMove = (e): void => {
 			if (e.buttons === 0 || e.which === 0) {
 				active.value = false
 			}

@@ -54,7 +54,7 @@
 
 <script setup>
 import ScrollPane from './ScrollPane'
-import { getNormalPath } from '@/utils/mei-mei'
+import { getNormalPath } from '@/utils/tools'
 import useTagsViewStore from '@/store/modules/tagsView'
 import useSettingsStore from '@/store/modules/settings'
 import usePermissionStore from '@/store/modules/permission'
@@ -71,7 +71,7 @@ const route = useRoute()
 const router = useRouter()
 
 const visitedViews = computed(() => useTagsViewStore().visitedViews)
-const routes = computed(() => usePermissionStore().routes)
+const routes = computed(() => usePermissionStore().sidebarRouters)
 const theme = computed(() => useSettingsStore().theme)
 
 watch(route, () => {
@@ -184,6 +184,7 @@ function refreshSelectedTag(view) {
 	}
 }
 function closeSelectedTag(view) {
+	console.log(route)
 	proxy.$tab.closePage(view).then(({ visitedViews }) => {
 		if (isActive(view)) {
 			toLastView(visitedViews, view)
@@ -330,6 +331,7 @@ function handleScroll() {
 //reset element css of el-icon-close
 .tags-view-wrapper {
 	.tags-view-item {
+		border-radius: 4px;
 		.el-icon-close {
 			width: 16px;
 			height: 16px;
@@ -344,7 +346,7 @@ function handleScroll() {
 				vertical-align: -3px;
 			}
 			&:hover {
-				background-color: #b4bccc;
+				background-color: #bad0ff;
 				color: #fff;
 				width: 12px !important;
 				height: 12px !important;

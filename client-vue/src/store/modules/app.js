@@ -10,7 +10,6 @@ const useAppStore = defineStore('app', {
 			hide: false,
 		},
 		device: 'desktop',
-		size: Cookies.get('size') || 'default',
 	}),
 	actions: {
 		toggleSideBar(withoutAnimation) {
@@ -32,10 +31,6 @@ const useAppStore = defineStore('app', {
 		},
 		toggleDevice(device) {
 			this.device = device
-		},
-		setSize(size) {
-			this.size = size
-			Cookies.set('size', size)
 		},
 		toggleSideBarHide(status) {
 			this.sidebar.hide = status

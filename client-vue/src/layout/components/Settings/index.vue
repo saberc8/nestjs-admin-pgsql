@@ -81,13 +81,6 @@
 		<h3 class="drawer-title">系统布局配置</h3>
 
 		<div class="drawer-item">
-			<span>开启顶部导航</span>
-			<span class="comp-style">
-				<el-switch v-model="topNav" class="drawer-switch" />
-			</span>
-		</div>
-
-		<div class="drawer-item">
 			<span>开启标签页</span>
 			<span class="comp-style">
 				<el-switch v-model="tagsView" class="drawer-switch" />
@@ -140,7 +133,7 @@ const theme = ref(settingsStore.theme)
 const sideTheme = ref(settingsStore.sideTheme)
 const storeSettings = computed(() => settingsStore)
 const predefineColors = ref([
-	'#2f54eb',
+	'#1677ff',
 	'#ff4500',
 	'#ff8c00',
 	'#ffd700',
@@ -150,17 +143,6 @@ const predefineColors = ref([
 	'#c71585',
 ])
 
-/** 是否需要topnav */
-const topNav = computed({
-	get: () => storeSettings.value.topNav,
-	set: (val) => {
-		settingsStore.changeSetting({ key: 'topNav', value: val })
-		if (!val) {
-			appStore.toggleSideBarHide(false)
-			permissionStore.setSidebarRouters(permissionStore.defaultRoutes)
-		}
-	},
-})
 /** 是否需要tagview */
 const tagsView = computed({
 	get: () => storeSettings.value.tagsView,
@@ -204,7 +186,6 @@ function handleTheme(val) {
 function saveSetting() {
 	proxy.$modal.loading('正在保存，请稍候...')
 	let layoutSetting = {
-		topNav: storeSettings.value.topNav,
 		tagsView: storeSettings.value.tagsView,
 		fixedHeader: storeSettings.value.fixedHeader,
 		sidebarLogo: storeSettings.value.sidebarLogo,

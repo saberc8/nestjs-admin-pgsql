@@ -56,7 +56,7 @@
 <script setup>
 import { isExternal } from '@/utils/validate'
 import AppLink from './Link'
-import { getNormalPath } from '@/utils/mei-mei'
+import { getNormalPath } from '@/utils/tools'
 import TooltipOver from '@/components/TooltipOver/index.vue'
 
 const props = defineProps({

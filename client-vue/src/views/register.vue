@@ -6,7 +6,7 @@
 			:rules="registerRules"
 			class="register-form"
 		>
-			<h3 class="title">后台管理系统</h3>
+			<h3 class="title">栖息地生态管理系统</h3>
 			<el-form-item prop="username">
 				<el-input
 					v-model="registerForm.username"
@@ -85,7 +85,7 @@
 		</el-form>
 		<!--  底部  -->
 		<div class="el-register-footer">
-			<span>后台管理系统</span>
+			<span>栖息地生态管理系统</span>
 		</div>
 	</div>
 </template>

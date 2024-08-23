@@ -6,7 +6,6 @@
 			ref="treeSelect"
 			:filterable="true"
 			:clearable="true"
-			@clear="clearHandle"
 			:filter-method="selectFilterData"
 			:placeholder="placeholder"
 		>
@@ -88,8 +87,6 @@ function initHandle() {
 				proxy.$refs.selectTree.setCurrentKey(selectedValue) // 设置默认选中
 				defaultExpandedKey.value = [selectedValue] // 设置默认展开
 			}
-		} else {
-			clearHandle()
 		}
 	})
 }
@@ -111,15 +108,15 @@ function clearHandle() {
 	valueTitle.value = ''
 	valueId.value = ''
 	defaultExpandedKey.value = []
-	clearSelected()
+	// clearSelected()
 }
-function clearSelected() {
-	const allNode = document.querySelectorAll('#tree-option .el-tree-node')
-	allNode.forEach((element) => element.classList.remove('is-current'))
-}
+// function clearSelected() {
+// 	const allNode = document.querySelectorAll('#tree-option .el-tree-node')
+// 	allNode.forEach((element) => element.classList.remove('is-current'))
+// }
 
 onMounted(() => {
-	initHandle()
+	// initHandle()
 })
 
 watch(valueId, () => {

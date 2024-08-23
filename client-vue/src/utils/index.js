@@ -1,4 +1,4 @@
-import { parseTime } from './mei-mei'
+import { parseTime } from './tools'
 import dayjs from 'dayjs'
 
 /**
@@ -403,4 +403,12 @@ export function dateChange(inputDate) {
 	)
 	if (formattedDate.isValid()) return formattedDate.format('YYYY-MM-DD')
 	return ''
+}
+
+/**
+ * 驼峰转换下划线
+ * @param { String } name
+ */
+export function toLine(name) {
+  return name.replace(/([A-Z])/g, '_$1').toLowerCase()
 }

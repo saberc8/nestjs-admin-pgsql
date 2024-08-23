@@ -4,7 +4,6 @@ import { getWeb } from '@/api/login.js'
 const {
 	sideTheme,
 	showSettings,
-	topNav,
 	tagsView,
 	fixedHeader,
 	sidebarLogo,
@@ -14,10 +13,9 @@ const {
 const useSettingsStore = defineStore('settings', {
 	state: () => ({
 		title: '',
-		theme: '#2f54eb',
+		theme: '#1677ff',
 		sideTheme: sideTheme,
 		showSettings: showSettings,
-		topNav: undefined,
 		tagsView: undefined,
 		fixedHeader: undefined,
 		sidebarLogo: undefined,
@@ -30,13 +28,9 @@ const useSettingsStore = defineStore('settings', {
 				getWeb()
 					.then(({ data }) => {
 						const storageSetting = data || {}
-						this.theme = storageSetting.theme || '#2f54eb'
+						this.theme = storageSetting.theme || '#1677ff'
 						this.sideTheme = storageSetting.sideTheme || sideTheme
 						this.showSettings = showSettings
-						this.topNav =
-							storageSetting.topNav === undefined
-								? topNav
-								: storageSetting.topNav
 						this.tagsView =
 							storageSetting.tagsView === undefined
 								? tagsView

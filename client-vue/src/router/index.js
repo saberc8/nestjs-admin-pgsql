@@ -1,7 +1,6 @@
 import { createWebHashHistory, createRouter } from 'vue-router'
 /* Layout */
 import Layout from '@/layout'
-import ParentView from '@/components/ParentView'
 
 /**
  * Note: 路由配置项
@@ -44,6 +43,11 @@ export const constantRoutes = [
 		hidden: true,
 	},
 	{
+		path: '/map',
+		component: () => import('@/views/map'),
+		hidden: true,
+	},
+	{
 		path: '/register',
 		component: () => import('@/views/register'),
 		hidden: true,
@@ -59,12 +63,6 @@ export const constantRoutes = [
 		hidden: true,
 	},
 	{
-		path: '/printTemplate',
-		component: () => import('@/views/printTemplate/index'),
-		name: 'PrintTemplate',
-		hidden: true,
-	},
-	{
 		path: '',
 		component: Layout,
 		redirect: '/index',
@@ -74,7 +72,7 @@ export const constantRoutes = [
 				component: () => import('@/views/index'),
 				name: 'Index',
 				meta: { title: '首页', icon: 'dashboard', affix: true },
-			},
+			}
 		],
 	},
 	{
@@ -150,55 +148,7 @@ export const dynamicRoutes = [
 				meta: { title: '调度日志', activeMenu: '/monitor/job' },
 			},
 		],
-	},
-	{
-		path: '/tool/gen-edit',
-		component: Layout,
-		hidden: true,
-		permissions: ['tool:gen:edit'],
-		children: [
-			{
-				path: 'index/:tableId(\\d+)',
-				component: () => import('@/views/tool/gen/editTable'),
-				name: 'GenEdit',
-				meta: { title: '修改生成配置', activeMenu: '/tool/gen' },
-			},
-		],
-	},
-	// 各类自定义三极路由
-	{
-		path: '/basicData/goodsManagement-custom',
-		component: Layout,
-		hidden: true,
-		permissions: ['tool:gen:edit'],
-		children: [
-			{
-				path: 'addGoodsMessage/:type/:id(\\d+)',
-				component: () =>
-					import(
-						'@/views/basicData/goodsManagement/goodsMessage/addGoodsMessage'
-					),
-				name: 'AddGoodsMessage',
-				meta: {
-					title: '新增商品',
-					activeMenu: '/basicData/goodsManagement/goodsMessage',
-				},
-			},
-			{
-				path: 'goodsMessageDetails/:id(\\d+)',
-				component: () =>
-					import(
-						'@/views/basicData/goodsManagement/goodsMessage/goodsMessageDetails'
-					),
-				name: 'goodsMessageDetails',
-				meta: {
-					noCache: true,
-					title: '商品详情',
-					activeMenu: '/basicData/goodsManagement/goodsMessage',
-				},
-			},
-		],
-	},
+	}
 ]
 
 const router = createRouter({

@@ -100,7 +100,6 @@
 								}"
 								value-key="deptId"
 								placeholder="选择上级部门"
-								check-strictly
 							/>
 						</el-form-item>
 					</el-col>
@@ -280,9 +279,6 @@ const data = reactive({
 		status: undefined,
 	},
 	rules: {
-		parentId: [
-			{ required: true, message: '上级部门不能为空', trigger: 'blur' },
-		],
 		deptName: [
 			{ required: true, message: '部门名称不能为空', trigger: 'blur' },
 		],

@@ -1,8 +1,7 @@
 import auth from '@/plugins/auth'
-import router, { constantRoutes, dynamicRoutes } from '@/router'
+import { constantRoutes } from '@/router'
 import { getRouters } from '@/api/menu'
 import Layout from '@/layout/index'
-import ParentView from '@/components/ParentView'
 import InnerLink from '@/layout/components/InnerLink'
 
 // 匹配views里面所有的.vue文件
@@ -10,45 +9,34 @@ const modules = import.meta.glob('./../../views/**/*.vue')
 
 const usePermissionStore = defineStore('permission', {
 	state: () => ({
-		routes: [],
-		addRoutes: [],
-		defaultRoutes: [],
-		topbarRouters: [],
+		// routes: [],
 		sidebarRouters: [],
 	}),
 	actions: {
-		setRoutes(routes) {
-			this.addRoutes = routes
-			this.routes = constantRoutes.concat(routes)
-		},
-		setDefaultRoutes(routes) {
-			this.defaultRoutes = constantRoutes.concat(routes)
-		},
-		setTopbarRoutes(routes) {
-			this.topbarRouters = routes
-		},
+		// setRoutes(routes) {
+		// 	this.routes = constantRoutes.concat(routes)
+		// },
 		setSidebarRouters(routes) {
 			this.sidebarRouters = routes
 		},
-		generateRoutes(roles) {
+		generateRoutes() {
 			return new Promise((resolve) => {
 				// 向后端请求路由数据
 				getRouters().then((res) => {
 					const sdata = JSON.parse(JSON.stringify(res.data))
-					const rdata = JSON.parse(JSON.stringify(res.data))
-					const defaultData = JSON.parse(JSON.stringify(res.data))
 					const sidebarRoutes = filterAsyncRouter(sdata)
-					const rewriteRoutes = filterAsyncRouter(rdata, false, true)
-					const defaultRoutes = filterAsyncRouter(defaultData)
-					const asyncRoutes = filterDynamicRoutes(dynamicRoutes)
-					asyncRoutes.forEach((route) => {
-						router.addRoute(route)
+					sidebarRoutes.sort((a, b) => {
+						return a.orderNum - b.orderNum
 					})
-					this.setRoutes(rewriteRoutes)
+					sidebarRoutes.forEach((item) => {
+						if (item.children && item.children.length) {
+							item.children.sort((a, b) => {
+								return a.orderNum - b.orderNum
+							})
+						}
+					})
 					this.setSidebarRouters(constantRoutes.concat(sidebarRoutes))
-					this.setDefaultRoutes(sidebarRoutes)
-					this.setTopbarRoutes(defaultRoutes)
-					resolve(rewriteRoutes)
+					resolve(sidebarRoutes)
 				})
 			})
 		},
@@ -56,17 +44,17 @@ const usePermissionStore = defineStore('permission', {
 })
 
 // 遍历后台传来的路由字符串，转换为组件对象
-function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false) {
-	return asyncRouterMap.filter((route) => {
+// q: type的作用
+// a: type为true时，children不会被删除
+function filterAsyncRouter(asyncRouterMap, type = false) {
+	const data = JSON.parse(JSON.stringify(asyncRouterMap))
+	return data.filter((route) => {
 		if (type && route.children) {
 			route.children = filterChildren(route.children)
 		}
 		if (route.component) {
-			// Layout ParentView 组件特殊处理
 			if (route.component === 'Layout') {
 				route.component = Layout
-			} else if (route.component === 'ParentView') {
-				route.component = ParentView
 			} else if (route.component === 'InnerLink') {
 				route.component = InnerLink
 			} else {
@@ -74,7 +62,7 @@ function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false) {
 			}
 		}
 		if (route.children != null && route.children && route.children.length) {
-			route.children = filterAsyncRouter(route.children, route, type)
+			route.children = filterAsyncRouter(route.children, type)
 		} else {
 			delete route['children']
 			delete route['redirect']
