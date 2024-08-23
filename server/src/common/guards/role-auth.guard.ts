@@ -33,6 +33,7 @@ export class RoleAuthGuard implements CanActivate {
         return userRoleArr.includes(userPermission);
       });
     }
+    console.log(2);
     if (!result) throw new ApiException('暂无权限访问，请联系管理员');
     return result;
   }

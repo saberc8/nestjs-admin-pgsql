@@ -7,31 +7,24 @@ import {
   Post,
   Query,
   UploadedFile,
-  UploadedFiles,
   UseInterceptors,
+  Body
 } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { Public } from 'src/common/decorators/public.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadService } from './upload.service';
 @Controller('common')
 export class UploadController {
-  /* 单文件上传 */
-  @Post('upload')
+  constructor(private uploadService: UploadService) {}
+  // 七牛云上传
+  @Post('upload/qiniu')
+  @Public()
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(
-    @UploadedFile() file: Express.Multer.File,
-    @Query('fileName') fileName,
-  ) {
+  async uploadFile(@UploadedFile() file, @Body() fileInfo: any) {
+    const data = await this.uploadService.uploadFile(file);
     return {
-      fileName,
-      originalname: file.originalname,
-      mimetype: file.mimetype,
+      errcode: 200,
+      data,
     };
-  }
-
-  /* 数组文件上传 */
-  @Post('uploads')
-  @UseInterceptors(FilesInterceptor('files'))
-  async uploadFils(@UploadedFiles() files: Array<Express.Multer.File>) {
-    /* 暂未处理 */
-    return files;
   }
 }

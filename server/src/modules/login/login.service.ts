@@ -12,19 +12,17 @@ import { ApiException } from 'src/common/exceptions/api.exception';
 import { SharedService } from 'src/shared/shared.service';
 import { ConfigService } from '@nestjs/config';
 import { Payload } from './login.interface';
-import { Captcha } from 'captcha.gif';
 import Redis from 'ioredis';
 import { SysDept, SysRole, SysUser } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
-import { Menu, Route } from './dto/res-login.dto';
+import { Menu, ResInfo, Route } from './dto/res-login.dto';
 import { LoginInforService } from '../monitor/login-infor/login-infor.service';
 import { Request } from 'express';
 import { DataScope } from 'src/common/type/data-scope.type';
 import { OnlineDto } from '../monitor/online/dto/res-online.dto';
-import { ReqRegisterDto } from './dto/req-register.dto';
+import * as svgCaptcha from 'svg-captcha';
 import * as bcrypt from 'bcrypt';
-
-const captcha = new Captcha();
+import { ReqRegisterDto } from './dto/req-register.dto';
 @Injectable()
 export class LoginService {
   constructor(
@@ -38,14 +36,22 @@ export class LoginService {
 
   /* 创建验证码图片 */
   async createImageCaptcha() {
-    const { token, buffer } = captcha.generate(4);
+    const { data, text } = svgCaptcha.createMathExpr({
+      size: 4, //验证码长度
+      ignoreChars: '0o1i', // 验证码字符中排除 0o1i
+      noise: 3, // 干扰线条的数量
+      color: true, // 验证码的字符是否有颜色，默认没有，如果设定了背景，则默认有
+      background: '#ffffff', // 验证码图片背景颜色
+      width: 115.5,
+      height: 38,
+    });
     const result = {
-      img: buffer.toString('base64'),
+      img: data.toString(),
       uuid: this.sharedService.generateUUID(),
     };
     await this.redis.set(
       `${CAPTCHA_IMG_KEY}:${result.uuid}`,
-      token,
+      text,
       'EX',
       60 * 5,
     );
@@ -210,12 +216,10 @@ export class LoginService {
         OR: undefined,
       };
     }
-    console.log(roles, 'roles');
     const deptPromise = roles.map((role) => {
       if (role.dataScope === '2') {
         // 自定义数据权限
         const deptCheckStrictly = role.deptCheckStrictly;
-        console.log(deptCheckStrictly, 'deptCheckStrictly');
         return this.prisma.sysDept
           .findMany({
             where: {
@@ -227,7 +231,6 @@ export class LoginService {
             },
           })
           .then((depts) => {
-            console.log(depts, 'depts');
             if (!deptCheckStrictly) return depts;
             const filterRole = depts.filter((dept) => {
               return !depts.some(
@@ -264,19 +267,14 @@ export class LoginService {
         return [];
       }
     });
-    console.log(deptPromise, 'deptPromise');
     const deptArrArr: SysDept[][] = await Promise.all(deptPromise);
-    console.log(deptArrArr, 'deptArrArr');
-    if (deptArrArr.length) {
-      deptArrArr.forEach((item) => {
-        item.forEach((dept) => {
-          if (!deptIds.find((deptId) => deptId === dept.deptId)) {
-            deptIds.push(dept.deptId);
-          }
-        });
+    deptArrArr.forEach((item) => {
+      item.forEach((dept) => {
+        if (!deptIds.find((deptId) => deptId === dept.deptId)) {
+          deptIds.push(dept.deptId);
+        }
       });
-    }
-
+    });
     return {
       deptIds,
       userName,
@@ -318,6 +316,9 @@ export class LoginService {
           in: ['M', 'C'],
         },
         roles: rolesWhere,
+      },
+      orderBy: {
+        orderNum: 'asc',
       },
     });
     const menuTree: Menu[] = this.sharedService.handleTree(menus, 'menuId');

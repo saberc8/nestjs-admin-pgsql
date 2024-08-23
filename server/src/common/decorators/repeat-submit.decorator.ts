@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import { REOEATSUBMIT_METADATA } from '../contants/decorator.contant';
+import { REPEATSUBMIT_METADATA } from '../contants/decorator.contant';
 
 export class RepeatSubmitOption {
   interval?: number = 1; //默认1s
@@ -8,5 +8,5 @@ export class RepeatSubmitOption {
 
 export const RepeatSubmit = (option?: RepeatSubmitOption) => {
   const repeatSubmitOption = Object.assign(new RepeatSubmitOption(), option);
-  return SetMetadata(REOEATSUBMIT_METADATA, repeatSubmitOption);
+  return SetMetadata(REPEATSUBMIT_METADATA, repeatSubmitOption);
 };

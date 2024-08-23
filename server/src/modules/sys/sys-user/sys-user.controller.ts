@@ -75,6 +75,7 @@ export class SysUserController {
     @Query(PaginationPipe) getSysUserListDto: GetSysUserListDto,
     @User(UserEnum.dataScope) dataScope: DataScope,
   ) {
+    console.log('1');
     return await this.sysUserService.list(getSysUserListDto, dataScope);
   }
 

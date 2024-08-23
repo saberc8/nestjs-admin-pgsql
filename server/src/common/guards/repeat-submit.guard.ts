@@ -1,7 +1,7 @@
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { REOEATSUBMIT_METADATA } from '../contants/decorator.contant';
+import { REPEATSUBMIT_METADATA } from '../contants/decorator.contant';
 import { RepeatSubmitOption } from '../decorators/repeat-submit.decorator';
 import { Request } from 'express';
 import { ApiException } from '../exceptions/api.exception';
@@ -15,7 +15,7 @@ export class RepeatSubmitGuard implements CanActivate {
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const repeatSubmitOption: RepeatSubmitOption = this.reflector.get(
-      REOEATSUBMIT_METADATA,
+      REPEATSUBMIT_METADATA,
       context.getHandler(),
     );
     if (!repeatSubmitOption) return true;

@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: prod
+    ports:
+      - "3331:3331"
+    volumes:
+      - /app:/var/ouqi-server
+    network_mode: host

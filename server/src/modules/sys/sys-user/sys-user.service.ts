@@ -32,10 +32,9 @@ export class SysUserService {
   ) {}
   /* 分页查询 */
   async list(getSysUserListDto: GetSysUserListDto, dataScope: DataScope) {
+    console.log(dataScope, '分页查询分页查询分页查询');
     const { skip, take, status, userName, deptId, phonenumber, params } =
       getSysUserListDto;
-    const contains = deptId ? `,${deptId},` : '';
-    const deptSearch = deptId ? { ancestors: { contains } } : {};
     return await this.customPrisma.client.sysUser.findAndCount({
       include: {
         dept: true,
@@ -50,11 +49,13 @@ export class SysUserService {
           phonenumber: {
             contains: phonenumber,
           },
-          createTime: {
-            gte: params.beginTime,
-            lt: params.endTime,
-          },
-          dept: deptSearch,
+          dept: deptId ? { deptId } : undefined,
+          createTime: params.beginTime
+            ? {
+                gte: params.beginTime,
+                lt: params.endTime,
+              }
+            : undefined,
           OR: dataScope.OR,
         },
       },

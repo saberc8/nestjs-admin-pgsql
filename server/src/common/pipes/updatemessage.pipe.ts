@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 export class UpdateMessagePipe implements PipeTransform {
   constructor(@Inject(REQUEST) private readonly request: any) {}
   transform(value: DataBaseDto, metadata: ArgumentMetadata) {
-    const user: SysUser = this.request.user;
+    const user: SysUser = this.request.user || 'admin';
     value.updateBy = user.userName;
     value.updateTime = dayjs().format();
     return value;

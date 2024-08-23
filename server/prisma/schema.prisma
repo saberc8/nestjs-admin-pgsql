@@ -21,6 +21,7 @@ model SysWeb {
   createTime   DateTime  @default(now())
   updateBy     String?   @default("") @db.VarChar(64)
   updateTime   DateTime? @default(now())
+
   @@map("sys_web")
 }
 
@@ -93,6 +94,8 @@ model SysDictData {
   remark      String?      @db.VarChar(500)
   dictTypeObj SysDictType? @relation(fields: [dictType], references: [dictType])
 
+  // q: @@index 什么作用
+  // a: 用于创建索引
   @@index([dictType], map: "sys_dict_data_dictType_fkey_unique")
   @@map("sys_dict_data")
 }
@@ -273,7 +276,6 @@ model SysRole {
   @@map("sys_role")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// 用户表
 model SysUser {
   userId      Int       @id @default(autoincrement())
@@ -301,4 +303,31 @@ model SysUser {
 
   @@index([deptId], map: "sys_user_deptId_fkey")
   @@map("sys_user")
+}
+
+// 微信注册用户表
+model WxUser {
+  wxUserId     Int       @id @default(autoincrement())
+  nickName     String    @db.VarChar(50)
+  avatarUrl    String?   @default("") @db.VarChar(250)
+  city         String?   @default("") @db.VarChar(50)
+  country      String?   @default("")
+  province     String?   @default("") @db.VarChar
+  openid       String?   @unique @db.VarChar
+  sessionKey   String?   @db.VarChar
+  language     String?   @default("") @db.VarChar(50)
+  from         String?   @default("") @db.VarChar(50)
+  is_demote    Boolean?  @default(false)
+  gender       Int?      @default(0) // 性别 0  男 1 女
+  isWeixin     Boolean?  @default(true) // false robot
+  isAdmin      Boolean?  @default(false)
+  email        String?   @default("") @db.VarChar(50)
+  password     String?   @default("") @db.VarChar(100)
+  phonenumber  String?   @default("") @db.VarChar(11)
+  createTime   DateTime? @default(now())
+  delFlag      String?   @default("0") @db.Char(1)
+  remark       String?   @db.VarChar
+  inviteOpenid String?   @db.VarChar
+
+  @@map("wx_user")
 }

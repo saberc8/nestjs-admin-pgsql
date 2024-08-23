@@ -33,6 +33,7 @@ export class PermissionAuthGuard implements CanActivate {
         return permissions.includes(userPermission);
       });
     }
+    console.log(1);
     if (!result) throw new ApiException('暂无权限访问，请联系管理员');
     return result;
   }

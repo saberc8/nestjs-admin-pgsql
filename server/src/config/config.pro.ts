@@ -7,7 +7,7 @@ export default {
   /**
    * 服务启动的端口
    */
-  port: 3331,
+  port: 9888,
 
   /**
    * token加密的密匙
@@ -27,7 +27,7 @@ export default {
   redis: {
     host: 'localhost',
     port: '6379',
-    password: '123456',
+    password: 'redisJmx1122@',
     db: 0,
   },
 

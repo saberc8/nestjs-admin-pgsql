@@ -7,7 +7,7 @@ import * as multer from 'multer';
 import * as MIMEType from 'whatwg-mimetype';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
-
+import { UploadService } from './upload.service';
 export function storage(uploadPath) {
   return multer.diskStorage({
     // 配置上传文件夹
@@ -67,6 +67,6 @@ export function storage(uploadPath) {
     }),
   ],
   controllers: [UploadController],
-  providers: [MulterModule],
+  providers: [MulterModule, UploadService],
 })
 export class UploadModule {}

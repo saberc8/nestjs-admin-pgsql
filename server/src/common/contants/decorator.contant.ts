@@ -2,7 +2,10 @@
 export const KEEP_KEY = 'common:keep';
 
 /* 开发接口，无需登录,不进行 jwt 校验 */
-export const PUBLIC_KEY = 'common:publuc';
+export const PUBLIC_KEY = 'common:public';
+
+// 微信接口，根据 openid
+export const WEIXINAUTH_KEY = 'common:weixinAuth';
 
 /* 操作权限标识 */
 export const PERMISSION_KEY_METADATA = 'common:permission';
@@ -17,4 +20,4 @@ export const LOG_KEY_METADATA = 'common:log';
 export const DATASCOPE_KEY_METADATA = 'common:dataScope';
 
 /* 防止重复提交 */
-export const REOEATSUBMIT_METADATA = 'common:repeatSubmit';
+export const REPEATSUBMIT_METADATA = 'common:repeatSubmit';
