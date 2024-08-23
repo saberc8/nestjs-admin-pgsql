@@ -49,4 +49,11 @@ export default {
    * 启用就是后端允许跨域
    */
   cors: true,
+
+  qiniu: {
+    accessKey: 'test-t',
+    secretKey: 'test',
+    bucket: 'test',
+  },
+
 };

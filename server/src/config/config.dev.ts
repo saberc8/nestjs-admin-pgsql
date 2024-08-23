@@ -51,25 +51,9 @@ export default {
   cors: true,
 
   qiniu: {
-    accessKey: '_1nCH_meiWOJtz5_S2KGiwrjmQ-PaOjedWtowkRx',
-    secretKey: '0yVbFcf3RwcLvby8aVXH3IoqKMk1hWwB31enhly8',
-    bucket: 'avalon2023',
+    accessKey: 'test-t',
+    secretKey: 'test',
+    bucket: 'test',
   },
 
-  //   # vue小程序
-  // group:
-  //   appid: 'wx4c6b7c15065443ed'
-  //   secret: 'b526efc19a4514172465ebd09a7a998f'
-
-  // # qiniu 配置
-  // qiniu:
-  //   accessKey: '_1nCH_meiWOJtz5_S2KGiwrjmQ-PaOjedWtowkRx'
-  //   secretKey: '0yVbFcf3RwcLvby8aVXH3IoqKMk1hWwB31enhly8'
-  //   bucket: 'avalon2023'
-
-  // # 大淘客配置
-  // dtk:
-  //   appkey: '60810a15b8af4'
-  //   appsecret: '6fc36806dea3229c54e495243c4ccffb'
-  //   pid: 'mm_131071916_1360250284_110097200202'
 };
