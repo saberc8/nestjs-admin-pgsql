@@ -56,7 +56,7 @@ export default {
     bucket: 'avalon2023',
   },
 
-  //   # 群多多小程序
+  //   # vue小程序
   // group:
   //   appid: 'wx4c6b7c15065443ed'
   //   secret: 'b526efc19a4514172465ebd09a7a998f'
